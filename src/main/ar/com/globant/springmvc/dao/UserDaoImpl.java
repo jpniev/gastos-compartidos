@@ -1,5 +1,7 @@
 package main.ar.com.globant.springmvc.dao;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -23,6 +25,12 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
     	Criteria crit = createEntityCriteria();
         crit.add(Restrictions.eq("apiKey", apiKey));
         return (User) crit.uniqueResult();
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<User> findAllUsers() {
+        Criteria criteria = createEntityCriteria();
+        return (List<User>) criteria.list();
     }
  
      

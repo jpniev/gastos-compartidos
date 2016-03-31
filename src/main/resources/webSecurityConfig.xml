@@ -10,11 +10,12 @@
  
     <!-- Rest authentication entry point configuration -->
     <http use-expressions="true" entry-point-ref="restAuthenticationEntryPoint" auto-config="false">
-        
+        <http-basic/>
         <intercept-url pattern="/api**" access="isAuthenticated()" />
         <intercept-url pattern="/api/employee/new**" access="hasRole('ADMIN')"/>
         <intercept-url pattern="/api/employee/delete**" access="hasRole('ADMIN')"/>
         <intercept-url pattern="/api/employee/edit**" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/api/getUserDetails/all**" access="hasRole('ADMIN')"/>
         
         <sec:form-login authentication-success-handler-ref="mySuccessHandler"
             authentication-failure-handler-ref="myFailureHandler" />

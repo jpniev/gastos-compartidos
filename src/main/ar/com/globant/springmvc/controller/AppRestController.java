@@ -8,7 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +48,18 @@ public class AppRestController {
         }
         System.out.println("Encontré un usuario!");
         return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
+	
+	@RequestMapping(value = "/getUserDetails/all/", method = RequestMethod.GET)
+    public ResponseEntity<List<User>> listAllUsers(@RequestParam("apiKey") String apiKey) {
+		if (!checkApiKeyAdmin(apiKey)){
+			return new ResponseEntity<List<User>>(HttpStatus.FORBIDDEN);
+		}
+		List<User> users = userService.findAllUsers();
+        if(users.isEmpty()){
+            return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND
+        }
+        return new ResponseEntity<List<User>>(users, HttpStatus.OK);
     }
 	
 	@RequestMapping(value = "/employee/ssn/{ssn}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -95,7 +106,6 @@ public class AppRestController {
         return new ResponseEntity<List<Employee>>(employees, HttpStatus.OK);
     }
 	
-	//@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/employee/", method = RequestMethod.POST)
     public ResponseEntity<Void> createEmployee(@RequestParam("apiKey") String apiKey, @RequestBody Employee employee, UriComponentsBuilder ucBuilder) {
 		
@@ -115,8 +125,7 @@ public class AppRestController {
         headers.setLocation(ucBuilder.path("/employee/{ssn}").buildAndExpand(employee.getSsn()).toUri());
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
-	
-	//@Secured("ROLE_ADMIN")	
+		
 	@RequestMapping(value = "/employee/ssn/{ssn}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Employee> updateEmployee(@PathVariable("ssn") String ssn, @RequestParam("apiKey") String apiKey, @RequestBody Employee employee) {
 		if (!checkApiKeyAdmin(apiKey)){
@@ -141,7 +150,6 @@ public class AppRestController {
         return new ResponseEntity<Employee>(employee, HttpStatus.OK);
     }
 	
-	//@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/employee/ssn/{ssn}", method = RequestMethod.DELETE)
     public ResponseEntity<Employee> deleteEmployee(@PathVariable("ssn") String ssn, @RequestParam("apiKey") String apiKey) {
 		if (!checkApiKeyAdmin(apiKey)){
