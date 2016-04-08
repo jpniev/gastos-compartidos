@@ -25,7 +25,7 @@ import com.fasterxml.jackson.datatype.joda.JodaModule;
 @ComponentScan(basePackages = "main.ar.com.globant.springmvc")
 public class AppConfig extends WebMvcConfigurerAdapter {
      
-    @Bean
+    /*@Bean
     public ViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setViewClass(JstlView.class);
@@ -39,7 +39,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename("messages");
         return messageSource;
-    }
+    }*/
     
   
     private ObjectMapper objectMapper() {
@@ -66,8 +66,8 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
     
     
-    @Override
+    /*@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("/static/");
-    }
+    }*/
 }
